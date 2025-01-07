@@ -2,7 +2,7 @@
 # Weather API
 An implementation of [Weather API](https://roadmap.sh/projects/weather-api-wrapper-service) with Typescript, NestJS, and Redis.
 
-**Key skills**
+**Key Features and Concepts**
 1. REST API
 2. 3rd party API integration
 3. Caching
