@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    WeatherModule, 
     ConfigModule.forRoot({
       ignoreEnvFile: process.env.NODE_ENV === 'production'
     })
