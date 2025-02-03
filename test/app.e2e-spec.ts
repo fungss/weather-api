@@ -25,4 +25,27 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  describe('/weather', () => {
+    it('should return weather data for a given location', () => {
+      const location = 'London';
+      return request(app.getHttpServer())
+        .get('/weather')
+        .query({ location })
+        .expect(200)
+        .expect((res) => {
+          expect(res.text).toBe(`you entered ${location}`);
+        });
+    });
+
+    // TODO: currently returns 200, should return 400
+    it('should handle missing location parameter', () => {
+      return request(app.getHttpServer())
+        .get('/weather')
+        .expect(200)
+        .expect((res) => {
+          expect(res.text).toBe(`you entered undefined`);
+        });
+    });
+  });
 });
