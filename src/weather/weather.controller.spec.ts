@@ -1,7 +1,8 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { WeatherController } from "./weather.controller";
-import { WeatherService } from "./weather.service";
-import { ConfigService } from "@nestjs/config";
+import { Test, TestingModule } from '@nestjs/testing';
+import { WeatherController } from './weather.controller';
+import { WeatherService } from './weather.service';
+import { ConfigService } from '@nestjs/config';
+import { BadRequestException } from '@nestjs/common';
 
 describe("WeatherController", () => {
   let controller: WeatherController;
@@ -29,17 +30,24 @@ describe("WeatherController", () => {
     expect(controller).toBeDefined();
   });
 
-  describe("findByLocation", () => {
-    it("should call weatherService.findByLocation with correct parameter", async () => {
-      const location = "London";
-      const expectedResult = `you entered ${location}`;
+  describe('findByLocation', () => {
+    it('should call weatherService.findByLocation with correct parameter', async () => {
+      const location = 'London';
+      const expectedResult = {
+        'message': 'pang testing' 
+      };
 
       jest.spyOn(weatherService, "findByLocation").mockResolvedValue(expectedResult);
 
-      const result = await controller.findByLocation(location);
+      // test if controller calling correct service
+      expect(await controller.findByLocation(location)).toBe(expectedResult);
+      // test if correct param submitted
+      expect(await weatherService.findByLocation).toHaveBeenCalledWith(location);
+    });
 
-      expect(weatherService.findByLocation).toHaveBeenCalledWith(location);
-      expect(result).toBe(expectedResult);
+    it('should throw BadRequestException for invalid location', async () => {
+      expect(await controller.findByLocation(null)).toThrow(BadRequestException);
+      expect(await controller.findByLocation('')).toThrow(BadRequestException);
     });
   });
 });

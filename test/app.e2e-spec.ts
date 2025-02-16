@@ -35,11 +35,10 @@ describe("AppController (e2e)", () => {
         });
     });
 
-    // TODO: currently returns 200, should return 400
-    it("should handle missing location parameter", () => {
+    it('should handle missing location parameter', () => {
       return request(app.getHttpServer())
-        .get("/weather")
-        .expect(200)
+        .get('/weather')
+        .expect(400)
         .expect((res) => {
           expect(res.text).toBe(`you entered undefined`);
         });

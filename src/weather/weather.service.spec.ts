@@ -1,6 +1,11 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { WeatherService } from "./weather.service";
-import { ConfigService } from "@nestjs/config";
+import { Test, TestingModule } from '@nestjs/testing';
+import { WeatherService } from './weather.service';
+import { ConfigService } from '@nestjs/config';
+import { BadGatewayException } from '@nestjs/common';
+import axios from 'axios';
+
+jest.mock('axios'); // Mocks the entire axios module
+const mockedAxios = axios as jest.Mocked<typeof axios>; // Type assertion
 
 describe("WeatherService", () => {
   let service: WeatherService;
@@ -31,11 +36,13 @@ describe("WeatherService", () => {
     expect(configService.get).toHaveBeenCalledWith("VISUAL_CROSSING_API_KEY");
   });
 
-  describe("findByLocation", () => {
-    it("should return location string", async () => {
-      const location = "New York";
-      const result = await service.findByLocation(location);
-      expect(result).toBe(`you entered ${location}`);
+  describe('findByLocation', () => {
+    it('should handle invalid response from Weather API', async () => {
+
+      const mockApiResponse = { resolvedAddress: "London, England, United Kingdom" };
+      mockedAxios.get.mockResolvedValue(mockApiResponse);
+    
+      expect(await service.findByLocation('London')).rejects.toThrow(BadGatewayException);
     });
   });
 });
