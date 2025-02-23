@@ -1,9 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { WeatherController } from './weather.controller';
-import { WeatherService } from './weather.service';
-import { ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from "@nestjs/testing";
+import { WeatherController } from "./weather.controller";
+import { WeatherService } from "./weather.service";
+import { ConfigService } from "@nestjs/config";
 
-describe('WeatherController', () => {
+describe("WeatherController", () => {
   let controller: WeatherController;
   let weatherService: WeatherService;
 
@@ -15,28 +15,26 @@ describe('WeatherController', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest.fn().mockReturnValue('mock-api-key'),
-          },
-        },
-      ],
+            get: jest.fn().mockReturnValue("mock-api-key")
+          }
+        }
+      ]
     }).compile();
 
     controller = module.get<WeatherController>(WeatherController);
     weatherService = module.get<WeatherService>(WeatherService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 
-  describe('findByLocation', () => {
-    it('should call weatherService.findByLocation with correct parameter', async () => {
-      const location = 'London';
+  describe("findByLocation", () => {
+    it("should call weatherService.findByLocation with correct parameter", async () => {
+      const location = "London";
       const expectedResult = `you entered ${location}`;
 
-      jest
-        .spyOn(weatherService, 'findByLocation')
-        .mockResolvedValue(expectedResult);
+      jest.spyOn(weatherService, "findByLocation").mockResolvedValue(expectedResult);
 
       const result = await controller.findByLocation(location);
 
